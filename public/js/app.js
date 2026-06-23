@@ -1,23 +1,34 @@
 /* ===== Wonderful Car — App Logic ===== */
 
-const DEFAULT_CAR_IMAGE =
-  'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=600&q=80&auto=format&fit=crop';
+const DEFAULT_CAR_IMAGE = '/assets/cars/dacia-sandero.jpg';
 
-const CARS = [
+const FALLBACK_CARS = [
   {
     id: 1,
-    name: 'Renault Clio V',
+    name: 'Dacia Sandero',
     category: 'economique',
     price: 199,
     transmission: 'manuelle',
     seats: 5,
     fuel: 'Essence',
     bags: 2,
-    image: 'https://images.unsplash.com/photo-1609521263047-f8f205293f24?w=600&q=80',
-    badge: 'Populaire',
+    image: '/assets/cars/dacia-sandero.jpg',
+    badge: 'N°1 Maroc',
   },
   {
     id: 2,
+    name: 'Renault Clio V',
+    category: 'economique',
+    price: 210,
+    transmission: 'manuelle',
+    seats: 5,
+    fuel: 'Essence',
+    bags: 2,
+    image: '/assets/cars/renault-clio-v.jpg',
+    badge: 'Populaire',
+  },
+  {
+    id: 3,
     name: 'Dacia Logan',
     category: 'economique',
     price: 220,
@@ -25,107 +36,11 @@ const CARS = [
     seats: 5,
     fuel: 'Essence',
     bags: 3,
-    image: 'https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?w=600&q=80',
+    image: '/assets/cars/dacia-logan.jpg',
     badge: 'Économique',
-  },
-  {
-    id: 3,
-    name: 'Peugeot 208',
-    category: 'compacte',
-    price: 280,
-    transmission: 'automatique',
-    seats: 5,
-    fuel: 'Essence',
-    bags: 2,
-    image: 'https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?w=600&q=80',
-    badge: 'Compacte',
   },
   {
     id: 4,
-    name: 'Renault Megane',
-    category: 'compacte',
-    price: 320,
-    transmission: 'automatique',
-    seats: 5,
-    fuel: 'Diesel',
-    bags: 3,
-    image: 'https://images.unsplash.com/photo-1580273916550-e323be2ae537?w=600&q=80&auto=format&fit=crop',
-    badge: 'Berline',
-  },
-  {
-    id: 5,
-    name: 'Renault Captur',
-    category: 'suv',
-    price: 450,
-    transmission: 'automatique',
-    seats: 5,
-    fuel: 'Essence',
-    bags: 4,
-    image: 'https://images.unsplash.com/photo-1619767886558-efdc259cde1a?w=600&q=80&auto=format&fit=crop',
-    badge: 'SUV',
-  },
-  {
-    id: 6,
-    name: 'Dacia Duster',
-    category: '4x4',
-    price: 500,
-    transmission: 'manuelle',
-    seats: 5,
-    fuel: 'Diesel',
-    bags: 4,
-    image: 'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=600&q=80',
-    badge: '4x4',
-  },
-  {
-    id: 7,
-    name: 'Hyundai Tucson',
-    category: 'suv',
-    price: 550,
-    transmission: 'automatique',
-    seats: 5,
-    fuel: 'Diesel',
-    bags: 4,
-    image: 'https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?w=600&q=80',
-    badge: 'SUV',
-  },
-  {
-    id: 8,
-    name: 'Mercedes Classe C',
-    category: 'luxe',
-    price: 800,
-    transmission: 'automatique',
-    seats: 5,
-    fuel: 'Essence',
-    bags: 3,
-    image: 'https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=600&q=80',
-    badge: 'Premium',
-  },
-  {
-    id: 9,
-    name: 'BMW Série 3',
-    category: 'luxe',
-    price: 850,
-    transmission: 'automatique',
-    seats: 5,
-    fuel: 'Diesel',
-    bags: 3,
-    image: 'https://images.unsplash.com/photo-1555215695-3004980ad54e?w=600&q=80',
-    badge: 'Luxe',
-  },
-  {
-    id: 10,
-    name: 'Dacia Sandero',
-    category: 'economique',
-    price: 210,
-    transmission: 'manuelle',
-    seats: 5,
-    fuel: 'Essence',
-    bags: 2,
-    image: 'https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=600&q=80',
-    badge: 'Économique',
-  },
-  {
-    id: 11,
     name: 'Kia Picanto',
     category: 'economique',
     price: 190,
@@ -133,23 +48,35 @@ const CARS = [
     seats: 4,
     fuel: 'Essence',
     bags: 1,
-    image: 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=600&q=80&auto=format&fit=crop',
+    image: '/assets/cars/kia-picanto.jpg',
     badge: 'City',
   },
   {
-    id: 12,
-    name: 'Fiat Panda',
+    id: 5,
+    name: 'Hyundai i10',
     category: 'economique',
-    price: 205,
+    price: 200,
     transmission: 'manuelle',
     seats: 4,
     fuel: 'Essence',
-    bags: 2,
-    image: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=600&q=80',
+    bags: 1,
+    image: '/assets/cars/hyundai-i10.jpg',
     badge: 'Économique',
   },
   {
-    id: 13,
+    id: 6,
+    name: 'Peugeot 208',
+    category: 'compacte',
+    price: 280,
+    transmission: 'manuelle',
+    seats: 5,
+    fuel: 'Essence',
+    bags: 2,
+    image: '/assets/cars/peugeot-208.jpg',
+    badge: 'Compacte',
+  },
+  {
+    id: 7,
     name: 'Citroën C3',
     category: 'compacte',
     price: 260,
@@ -157,157 +84,153 @@ const CARS = [
     seats: 5,
     fuel: 'Essence',
     bags: 2,
-    image: 'https://images.unsplash.com/photo-1583121274602-3e2820c69888?w=600&q=80',
+    image: '/assets/cars/citroen-c3.jpg',
     badge: 'Compacte',
   },
   {
-    id: 14,
-    name: 'Volkswagen Polo',
+    id: 8,
+    name: 'Peugeot 301',
     category: 'compacte',
-    price: 300,
+    price: 270,
+    transmission: 'manuelle',
+    seats: 5,
+    fuel: 'Essence',
+    bags: 3,
+    image: '/assets/cars/peugeot-301.jpg',
+    badge: 'Berline',
+  },
+  {
+    id: 9,
+    name: 'Renault Symbol',
+    category: 'compacte',
+    price: 250,
+    transmission: 'manuelle',
+    seats: 5,
+    fuel: 'Essence',
+    bags: 3,
+    image: '/assets/cars/renault-symbol.jpg',
+    badge: 'Berline',
+  },
+  {
+    id: 10,
+    name: 'Citroën C-Elysée',
+    category: 'compacte',
+    price: 290,
+    transmission: 'manuelle',
+    seats: 5,
+    fuel: 'Diesel',
+    bags: 3,
+    image: '/assets/cars/citroen-c-elysee.jpg',
+    badge: 'Berline',
+  },
+  {
+    id: 11,
+    name: 'Renault Captur',
+    category: 'suv',
+    price: 420,
     transmission: 'automatique',
     seats: 5,
     fuel: 'Essence',
-    bags: 2,
-    image: 'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=600&q=80&auto=format&fit=crop',
-    badge: 'Compacte',
+    bags: 4,
+    image: '/assets/cars/renault-captur.jpg',
+    badge: 'SUV',
   },
   {
-    id: 15,
-    name: 'Toyota Corolla',
-    category: 'compacte',
-    price: 350,
-    transmission: 'automatique',
-    seats: 5,
-    fuel: 'Hybride',
-    bags: 3,
-    image: 'https://images.unsplash.com/photo-1542362567-b07e54358753?w=600&q=80&auto=format&fit=crop',
-    badge: 'Hybride',
-  },
-  {
-    id: 16,
-    name: 'Nissan Qashqai',
-    category: 'suv',
+    id: 12,
+    name: 'Dacia Duster',
+    category: '4x4',
     price: 480,
-    transmission: 'automatique',
+    transmission: 'manuelle',
     seats: 5,
     fuel: 'Diesel',
     bags: 4,
-    image: 'https://images.unsplash.com/photo-1609521263047-f8f205293f24?w=600&q=80',
-    badge: 'SUV',
+    image: '/assets/cars/dacia-duster.jpg',
+    badge: '4x4',
   },
   {
-    id: 17,
-    name: 'Kia Sportage',
-    category: 'suv',
-    price: 520,
-    transmission: 'automatique',
-    seats: 5,
-    fuel: 'Diesel',
-    bags: 4,
-    image: 'https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?w=600&q=80',
-    badge: 'SUV',
-  },
-  {
-    id: 18,
-    name: 'Ford Kuga',
+    id: 13,
+    name: 'Hyundai Tucson',
     category: 'suv',
     price: 500,
     transmission: 'automatique',
     seats: 5,
-    fuel: 'Essence',
+    fuel: 'Diesel',
     bags: 4,
-    image: 'https://images.unsplash.com/photo-1617531653332-bd46c24f2068?w=600&q=80&auto=format&fit=crop',
+    image: '/assets/cars/hyundai-tucson.jpg',
     badge: 'SUV',
   },
   {
-    id: 19,
-    name: 'Toyota RAV4',
-    category: '4x4',
-    price: 580,
-    transmission: 'automatique',
-    seats: 5,
-    fuel: 'Hybride',
-    bags: 4,
-    image: 'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=600&q=80',
-    badge: '4x4',
-  },
-  {
-    id: 20,
-    name: 'Jeep Renegade',
-    category: '4x4',
-    price: 550,
-    transmission: 'automatique',
-    seats: 5,
-    fuel: 'Diesel',
-    bags: 3,
-    image: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=600&q=80',
-    badge: '4x4',
-  },
-  {
-    id: 21,
-    name: 'Mitsubishi Pajero',
-    category: '4x4',
-    price: 650,
-    transmission: 'automatique',
+    id: 14,
+    name: 'Dacia Lodgy',
+    category: 'monospace',
+    price: 450,
+    transmission: 'manuelle',
     seats: 7,
     fuel: 'Diesel',
-    bags: 5,
-    image: 'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=600&q=80',
+    bags: 4,
+    image: '/assets/cars/dacia-lodgy.jpg',
     badge: '7 places',
   },
   {
-    id: 22,
-    name: 'Audi A4',
-    category: 'luxe',
-    price: 780,
-    transmission: 'automatique',
-    seats: 5,
-    fuel: 'Diesel',
-    bags: 3,
-    image: 'https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?w=600&q=80',
-    badge: 'Luxe',
+    id: 15,
+    name: 'Dacia Jogger',
+    category: 'monospace',
+    price: 480,
+    transmission: 'manuelle',
+    seats: 7,
+    fuel: 'Essence',
+    bags: 4,
+    image: '/assets/cars/dacia-jogger.jpg',
+    badge: '7 places',
   },
   {
-    id: 23,
-    name: 'Mercedes Classe E',
-    category: 'luxe',
-    price: 950,
-    transmission: 'automatique',
+    id: 16,
+    name: 'Renault Kangoo',
+    category: 'monospace',
+    price: 400,
+    transmission: 'manuelle',
     seats: 5,
     fuel: 'Diesel',
-    bags: 4,
-    image: 'https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=600&q=80',
-    badge: 'Premium',
-  },
-  {
-    id: 24,
-    name: 'Range Rover Evoque',
-    category: 'luxe',
-    price: 1100,
-    transmission: 'automatique',
-    seats: 5,
-    fuel: 'Diesel',
-    bags: 4,
-    image: 'https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?w=600&q=80&auto=format&fit=crop',
-    badge: 'Prestige',
+    bags: 5,
+    image: '/assets/cars/renault-kangoo.jpg',
+    badge: 'Familiale',
   },
 ];
+
+let CARS = [...FALLBACK_CARS];
+
+async function loadCars() {
+  try {
+    const res = await fetch('/api/cars');
+    if (res.ok) {
+      const data = await res.json();
+      if (Array.isArray(data) && data.length > 0) {
+        CARS = data;
+        return;
+      }
+    }
+  } catch {
+    /* use fallback */
+  }
+  CARS = [...FALLBACK_CARS];
+}
 
 let activeCategory = 'all';
 let selectedCar = null;
 let testimonialIndex = 0;
 
 /* ===== DOM Ready ===== */
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   initLoader();
   initHeroVideo();
+  initMap();
   initParticles();
   initCursorGlow();
   initHeader();
   initNav();
   initScrollReveal();
   initCounters();
+  await loadCars();
   initFleet();
   initSearch();
   initTestimonials();
@@ -316,6 +239,46 @@ document.addEventListener('DOMContentLoaded', () => {
   initScrollButtons();
   setMinDates();
 });
+
+/* ===== Google Maps ===== */
+function initMap() {
+  const wrap = document.querySelector('.map-wrap');
+  if (!wrap) return;
+
+  const mapUrl = wrap.dataset.mapUrl;
+  if (!mapUrl) return;
+
+  const iframe = wrap.querySelector('iframe');
+  if (iframe) {
+    iframe.src = buildGoogleMapsEmbed(mapUrl);
+  }
+
+  document.querySelectorAll('.map-external-link').forEach((link) => {
+    link.href = mapUrl;
+  });
+}
+
+function buildGoogleMapsEmbed(url) {
+  const coordMatch = url.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/);
+  const placeIdMatch = url.match(/!1s(0x[a-f0-9]+:0x[a-f0-9]+)/i);
+  const placeNameMatch = url.match(/\/place\/([^/@]+)/);
+
+  const lat = coordMatch?.[1];
+  const lng = coordMatch?.[2];
+  const placeId = placeIdMatch?.[1];
+  const placeName = decodeURIComponent((placeNameMatch?.[1] || 'Location').replace(/\+/g, ' '));
+
+  if (placeId && lat && lng) {
+    return `https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5000!2d${lng}!3d${lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s${encodeURIComponent(placeId)}!2s${encodeURIComponent(placeName)}!5e0!3m2!1sfr!2sma!4v${Date.now()}!5m2!1sfr!2sma`;
+  }
+
+  if (lat && lng) {
+    const query = encodeURIComponent(placeName);
+    return `https://maps.google.com/maps?q=${query}&ll=${lat},${lng}&z=16&output=embed&hl=fr`;
+  }
+
+  return url;
+}
 
 /* ===== Hero Video ===== */
 function initHeroVideo() {
