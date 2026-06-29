@@ -199,6 +199,163 @@ const FALLBACK_CARS = [
 
 let CARS = [...FALLBACK_CARS];
 
+const FALLBACK_SETTINGS = {
+  brandName: 'Wonderful',
+  brandAccent: 'Car',
+  logoIcon: 'WC',
+  logoUrl: '',
+  phone: '+212 625 699 723',
+  whatsapp: '212625699723',
+  email: 'contact@wonderfulcar.ma',
+  address: "Route de l'Aéroport, Fès 30000\nMaroc",
+  city: 'Fès',
+  mapUrl:
+    'https://www.google.com/maps/place/Wonderful+car/@34.0118964,-4.9883199,17z/data=!3m6!1s0xd9f8b820ef15e9b:0x42def445d4b05c24!8m2!3d34.0118964!4d-4.9883199',
+  metaTitle: 'Wonderful Car | Location de Voitures à Fès',
+  metaDescription:
+    'Wonderful Car — Location de voitures à Fès, Maroc. Véhicules récents, assurance tous risques, livraison aéroport 24/7. À partir de 199 DH/jour.',
+  heroBadge: 'Disponible 24h/24 — Fès, Maroc',
+  heroDescription:
+    "Wonderful Car vous propose des véhicules récents avec assurance tous risques. Livraison gratuite à l'aéroport Fès-Saïss et dans toute la ville.",
+  openingHours: 'Ouvert 24h/24, 7j/7',
+  heroVideoUrl: '7727416-hd_1280_720_50fps.mp4',
+  footerTagline: 'Location de voitures premium à Fès, Maroc. Véhicules récents, service 24/7.',
+  contactTitle: 'Retrouvez-nous à Fès',
+};
+
+let SITE_SETTINGS = { ...FALLBACK_SETTINGS };
+
+async function loadSettings() {
+  try {
+    const res = await fetch('/api/settings');
+    if (res.ok) {
+      const data = await res.json();
+      if (data && data.brandName) {
+        SITE_SETTINGS = data;
+        return;
+      }
+    }
+  } catch {
+    /* use fallback */
+  }
+  SITE_SETTINGS = { ...FALLBACK_SETTINGS };
+}
+
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function fullBrandName(settings = SITE_SETTINGS) {
+  return settings.brandAccent
+    ? `${settings.brandName} ${settings.brandAccent}`.trim()
+    : settings.brandName.trim();
+}
+
+function updateLogoEl(logo, settings, brandFull) {
+  let img = logo.querySelector('.logo-img');
+  const icon = logo.querySelector('.logo-icon');
+  const text = logo.querySelector('.logo-text');
+
+  if (settings.logoUrl) {
+    if (!img) {
+      img = document.createElement('img');
+      img.className = 'logo-img';
+      logo.insertBefore(img, logo.firstChild);
+    }
+    img.src = settings.logoUrl;
+    img.alt = brandFull;
+    img.style.display = 'block';
+    if (icon) icon.style.display = 'none';
+    if (text) text.style.display = 'none';
+  } else {
+    if (img) img.style.display = 'none';
+    if (icon) {
+      icon.textContent = settings.logoIcon || settings.brandName.slice(0, 2).toUpperCase();
+      icon.style.display = '';
+    }
+    if (text) {
+      text.innerHTML = settings.brandAccent
+        ? `${escapeHtml(settings.brandName)}<span>${escapeHtml(settings.brandAccent)}</span>`
+        : escapeHtml(settings.brandName);
+      text.style.display = '';
+    }
+  }
+}
+
+function applySettings() {
+  const s = SITE_SETTINGS;
+  const brandFull = fullBrandName(s);
+
+  document.title = s.metaTitle;
+  const meta = document.querySelector('meta[name="description"]');
+  if (meta) meta.setAttribute('content', s.metaDescription);
+
+  const loaderLogo = document.querySelector('.loader-logo');
+  if (loaderLogo) {
+    loaderLogo.innerHTML = s.brandAccent
+      ? `${escapeHtml(s.brandName)}<span>${escapeHtml(s.brandAccent)}</span>`
+      : escapeHtml(s.brandName);
+  }
+
+  document.querySelectorAll('.logo').forEach((logo) => updateLogoEl(logo, s, brandFull));
+
+  document.querySelectorAll('[data-setting]').forEach((el) => {
+    const key = el.dataset.setting;
+    if (key === 'copyright') return;
+
+    let val = s[key];
+    if (key === 'footerAddress') val = s.address.split('\n')[0];
+    if (val == null) return;
+
+    if (key === 'address') {
+      el.innerHTML = escapeHtml(val).replace(/\n/g, '<br />');
+    } else {
+      el.textContent = val;
+    }
+  });
+
+  const copyright = document.querySelector('[data-setting="copyright"]');
+  if (copyright) {
+    copyright.innerHTML = `&copy; ${new Date().getFullYear()} ${escapeHtml(brandFull)}. Tous droits réservés.`;
+  }
+
+  const telDigits = s.phone.replace(/\D/g, '');
+  const telHref = telDigits ? `tel:+${telDigits}` : '#';
+  document.querySelectorAll('[data-setting-link="tel"]').forEach((a) => {
+    a.href = telHref;
+  });
+
+  document.querySelectorAll('[data-setting-link="whatsapp"]').forEach((a) => {
+    const base = `https://wa.me/${s.whatsapp}`;
+    if (a.classList.contains('whatsapp-float')) {
+      a.href = `${base}?text=${encodeURIComponent(`Bonjour, je souhaite louer une voiture chez ${brandFull}.`)}`;
+    } else {
+      a.href = base;
+    }
+  });
+
+  document.querySelectorAll('[data-setting-link="mailto"]').forEach((a) => {
+    a.href = `mailto:${s.email}`;
+  });
+
+  document.querySelectorAll('[data-setting-link="map"]').forEach((a) => {
+    a.href = s.mapUrl;
+  });
+
+  const mapWrap = document.querySelector('.map-wrap');
+  if (mapWrap) mapWrap.dataset.mapUrl = s.mapUrl;
+
+  const mapIframe = document.querySelector('.map-wrap iframe');
+  if (mapIframe) mapIframe.title = `${brandFull} sur Google Maps`;
+
+  const heroVideo = document.querySelector('.hero-video');
+  if (heroVideo && s.heroVideoUrl) heroVideo.src = s.heroVideoUrl;
+}
+
 async function loadCars() {
   try {
     const res = await fetch('/api/cars');
@@ -221,6 +378,8 @@ let testimonialIndex = 0;
 
 /* ===== DOM Ready ===== */
 document.addEventListener('DOMContentLoaded', async () => {
+  await loadSettings();
+  applySettings();
   initLoader();
   initHeroVideo();
   initMap();
@@ -649,7 +808,7 @@ function initForms() {
         `Prix: ${selectedCar.price} DH/jour`
     );
 
-    window.open(`https://wa.me/212625699723?text=${msg}`, '_blank');
+    window.open(`https://wa.me/${SITE_SETTINGS.whatsapp}?text=${msg}`, '_blank');
     closeModal();
     showToast('Demande envoyée ! Nous vous contacterons rapidement.');
     e.target.reset();
@@ -666,13 +825,13 @@ function initForms() {
     const message = document.getElementById('contactMessage').value;
 
     const msg = encodeURIComponent(
-      `Demande de réservation Wonderful Car\n\n` +
+      `Demande de réservation ${fullBrandName()}\n\n` +
         `Nom: ${name}\nTéléphone: ${phone}\nEmail: ${email || 'N/A'}\n` +
         `Véhicule: ${car}\nDu: ${pickup} au ${ret}\n` +
         `Message: ${message || 'Aucun'}`
     );
 
-    window.open(`https://wa.me/212625699723?text=${msg}`, '_blank');
+    window.open(`https://wa.me/${SITE_SETTINGS.whatsapp}?text=${msg}`, '_blank');
     showToast('Votre demande a été envoyée via WhatsApp !');
     e.target.reset();
   });

@@ -22,3 +22,26 @@ model Car {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 }
+
+model SiteSettings {
+  id              Int      @id @default(1)
+  brandName       String
+  brandAccent     String   @default("")
+  logoIcon        String   @default("")
+  logoUrl         String   @default("")
+  phone           String
+  whatsapp        String
+  email           String
+  address         String
+  city            String   @default("")
+  mapUrl          String
+  metaTitle       String
+  metaDescription String   @default("")
+  heroBadge       String   @default("")
+  heroDescription String   @default("")
+  openingHours    String   @default("")
+  heroVideoUrl    String   @default("")
+  footerTagline   String   @default("")
+  contactTitle    String   @default("")
+  updatedAt       DateTime @updatedAt
+}

@@ -159,6 +159,14 @@ ul { list-style: none; }
 
 .logo-text span { color: var(--accent); }
 
+.logo-img {
+  height: 38px;
+  width: auto;
+  max-width: 160px;
+  object-fit: contain;
+  border-radius: 10px;
+}
+
 .nav-links {
   display: flex;
   gap: 2rem;

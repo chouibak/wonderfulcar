@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client';
+import { DEFAULT_SETTINGS } from '../lib/settings';
 
 const prisma = new PrismaClient();
 
@@ -23,13 +24,20 @@ const SEED_CARS = [
 
 async function main() {
   const count = await prisma.car.count();
-  if (count > 0) {
-    console.log(`Database already has ${count} cars — skipping seed.`);
-    return;
+  if (count === 0) {
+    await prisma.car.createMany({ data: SEED_CARS });
+    console.log(`Seeded ${SEED_CARS.length} cars.`);
+  } else {
+    console.log(`Database already has ${count} cars — skipping car seed.`);
   }
 
-  await prisma.car.createMany({ data: SEED_CARS });
-  console.log(`Seeded ${SEED_CARS.length} cars.`);
+  const settings = await prisma.siteSettings.findUnique({ where: { id: 1 } });
+  if (!settings) {
+    await prisma.siteSettings.create({ data: { id: 1, ...DEFAULT_SETTINGS } });
+    console.log('Seeded site settings.');
+  } else {
+    console.log('Site settings already exist — skipping settings seed.');
+  }
 }
 
 main()
