@@ -2,202 +2,7 @@
 
 const DEFAULT_CAR_IMAGE = '/assets/cars/dacia-sandero.jpg';
 
-const FALLBACK_CARS = [
-  {
-    id: 1,
-    name: 'Dacia Sandero',
-    category: 'economique',
-    price: 199,
-    transmission: 'manuelle',
-    seats: 5,
-    fuel: 'Essence',
-    bags: 2,
-    image: '/assets/cars/dacia-sandero.jpg',
-    badge: 'N°1 Maroc',
-  },
-  {
-    id: 2,
-    name: 'Renault Clio V',
-    category: 'economique',
-    price: 210,
-    transmission: 'manuelle',
-    seats: 5,
-    fuel: 'Essence',
-    bags: 2,
-    image: '/assets/cars/renault-clio-v.jpg',
-    badge: 'Populaire',
-  },
-  {
-    id: 3,
-    name: 'Dacia Logan',
-    category: 'economique',
-    price: 220,
-    transmission: 'manuelle',
-    seats: 5,
-    fuel: 'Essence',
-    bags: 3,
-    image: '/assets/cars/dacia-logan.jpg',
-    badge: 'Économique',
-  },
-  {
-    id: 4,
-    name: 'Kia Picanto',
-    category: 'economique',
-    price: 190,
-    transmission: 'manuelle',
-    seats: 4,
-    fuel: 'Essence',
-    bags: 1,
-    image: '/assets/cars/kia-picanto.jpg',
-    badge: 'City',
-  },
-  {
-    id: 5,
-    name: 'Hyundai i10',
-    category: 'economique',
-    price: 200,
-    transmission: 'manuelle',
-    seats: 4,
-    fuel: 'Essence',
-    bags: 1,
-    image: '/assets/cars/hyundai-i10.jpg',
-    badge: 'Économique',
-  },
-  {
-    id: 6,
-    name: 'Peugeot 208',
-    category: 'compacte',
-    price: 280,
-    transmission: 'manuelle',
-    seats: 5,
-    fuel: 'Essence',
-    bags: 2,
-    image: '/assets/cars/peugeot-208.jpg',
-    badge: 'Compacte',
-  },
-  {
-    id: 7,
-    name: 'Citroën C3',
-    category: 'compacte',
-    price: 260,
-    transmission: 'manuelle',
-    seats: 5,
-    fuel: 'Essence',
-    bags: 2,
-    image: '/assets/cars/citroen-c3.jpg',
-    badge: 'Compacte',
-  },
-  {
-    id: 8,
-    name: 'Peugeot 301',
-    category: 'compacte',
-    price: 270,
-    transmission: 'manuelle',
-    seats: 5,
-    fuel: 'Essence',
-    bags: 3,
-    image: '/assets/cars/peugeot-301.jpg',
-    badge: 'Berline',
-  },
-  {
-    id: 9,
-    name: 'Renault Symbol',
-    category: 'compacte',
-    price: 250,
-    transmission: 'manuelle',
-    seats: 5,
-    fuel: 'Essence',
-    bags: 3,
-    image: '/assets/cars/renault-symbol.jpg',
-    badge: 'Berline',
-  },
-  {
-    id: 10,
-    name: 'Citroën C-Elysée',
-    category: 'compacte',
-    price: 290,
-    transmission: 'manuelle',
-    seats: 5,
-    fuel: 'Diesel',
-    bags: 3,
-    image: '/assets/cars/citroen-c-elysee.jpg',
-    badge: 'Berline',
-  },
-  {
-    id: 11,
-    name: 'Renault Captur',
-    category: 'suv',
-    price: 420,
-    transmission: 'automatique',
-    seats: 5,
-    fuel: 'Essence',
-    bags: 4,
-    image: '/assets/cars/renault-captur.jpg',
-    badge: 'SUV',
-  },
-  {
-    id: 12,
-    name: 'Dacia Duster',
-    category: '4x4',
-    price: 480,
-    transmission: 'manuelle',
-    seats: 5,
-    fuel: 'Diesel',
-    bags: 4,
-    image: '/assets/cars/dacia-duster.jpg',
-    badge: '4x4',
-  },
-  {
-    id: 13,
-    name: 'Hyundai Tucson',
-    category: 'suv',
-    price: 500,
-    transmission: 'automatique',
-    seats: 5,
-    fuel: 'Diesel',
-    bags: 4,
-    image: '/assets/cars/hyundai-tucson.jpg',
-    badge: 'SUV',
-  },
-  {
-    id: 14,
-    name: 'Dacia Lodgy',
-    category: 'monospace',
-    price: 450,
-    transmission: 'manuelle',
-    seats: 7,
-    fuel: 'Diesel',
-    bags: 4,
-    image: '/assets/cars/dacia-lodgy.jpg',
-    badge: '7 places',
-  },
-  {
-    id: 15,
-    name: 'Dacia Jogger',
-    category: 'monospace',
-    price: 480,
-    transmission: 'manuelle',
-    seats: 7,
-    fuel: 'Essence',
-    bags: 4,
-    image: '/assets/cars/dacia-jogger.jpg',
-    badge: '7 places',
-  },
-  {
-    id: 16,
-    name: 'Renault Kangoo',
-    category: 'monospace',
-    price: 400,
-    transmission: 'manuelle',
-    seats: 5,
-    fuel: 'Diesel',
-    bags: 5,
-    image: '/assets/cars/renault-kangoo.jpg',
-    badge: 'Familiale',
-  },
-];
-
-let CARS = [...FALLBACK_CARS];
+let CARS = [];
 
 const FALLBACK_SETTINGS = {
   brandName: 'Wonderful',
@@ -356,6 +161,21 @@ function applySettings() {
   if (heroVideo && s.heroVideoUrl) heroVideo.src = s.heroVideoUrl;
 }
 
+async function loadFallbackCars() {
+  try {
+    const res = await fetch('/data/cars.json');
+    if (res.ok) {
+      const data = await res.json();
+      if (Array.isArray(data) && data.length > 0) {
+        return data.map((car, index) => ({ id: index + 1, ...car }));
+      }
+    }
+  } catch {
+    /* no fallback file */
+  }
+  return [];
+}
+
 async function loadCars() {
   try {
     const res = await fetch('/api/cars');
@@ -369,7 +189,7 @@ async function loadCars() {
   } catch {
     /* use fallback */
   }
-  CARS = [...FALLBACK_CARS];
+  CARS = await loadFallbackCars();
 }
 
 let activeCategory = 'all';
